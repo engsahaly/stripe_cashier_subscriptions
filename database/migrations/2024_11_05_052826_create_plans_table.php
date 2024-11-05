@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->integer('price');
             $table->string('stripe_price_id');
+            $table->string('interval');
             $table->timestamps();
         });
     }
