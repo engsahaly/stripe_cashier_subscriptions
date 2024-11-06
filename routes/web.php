@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -10,6 +11,11 @@ Route::get('/', function () {
 
 
 Route::get('/plans', [PlanController::class, 'index'])->name('plans');
+
+// Checkout
+Route::get('/checkout/{plan:slug}', [CheckoutController::class, 'index2'])->middleware('auth')->name('checkout');
+Route::post('/checkout/post', [CheckoutController::class, 'post'])->middleware('auth')->name('checkout.post');
+
 
 
 Route::get('/dashboard', function () {
