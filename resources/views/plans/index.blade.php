@@ -20,7 +20,7 @@
                                         <span class="ms-2 text-muted fs-6">/{{ $plan->interval }}</span>
                                     </p>
                                     <a href="{{ route('checkout', $plan) }}" class="btn btn-primary mt-3 w-50">
-                                        Buy plan
+                                        {{ $plan->name == 'Monthly Plan' ? 'Try Now (Trial 7 Days)' : 'Buy Now' }}
                                     </a>
                                 </div>
                             @endforeach

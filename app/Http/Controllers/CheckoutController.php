@@ -10,7 +10,11 @@ class CheckoutController extends Controller
 {
     public function index(Plan $plan)
     {
-        return Auth::user()->newSubscription($plan->slug, $plan->stripe_price_id )->checkout([
+        $query = Auth::user()->newSubscription($plan->slug, $plan->stripe_price_id );
+        return $query->when($plan->slug == 'monthly-plan', function () use ($query) {
+            return $query->trialDays(7);
+        })
+        ->checkout([
             'success_url' => route('home', ['message' => 'Subscribed Successfully']),
             'cancel_url' => route('plans'),
         ]);

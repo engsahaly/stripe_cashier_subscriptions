@@ -26,6 +26,21 @@
                     <x-nav-link :href="route('plans')" :active="request()->routeIs('plans')">
                         {{ __('Plans') }}
                     </x-nav-link>
+
+                    {{-- members Link --}}
+                    @if (Auth::user()?->subscribed('monthly-plan') || Auth::user()?->subscribed('yearly-plan'))
+                        <x-nav-link :href="route('members')" :active="request()->routeIs('members')">
+                            {{ __('Members Area') }}
+                        </x-nav-link>
+                    @endif
+
+                    {{-- trial Link --}}
+                    {{-- @if (Auth::user()?->subscription('monthly-plan')->onTrial()) --}}
+                    {{-- @if (Auth::user()?->onGenericTrial())
+                        <x-nav-link>
+                            {{ __('trial') }}
+                        </x-nav-link>
+                    @endif --}}
                 </div>
             </div>
 
