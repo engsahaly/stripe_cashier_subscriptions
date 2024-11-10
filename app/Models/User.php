@@ -22,7 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'trial_ends_at'
+        'trial_ends_at',
+        'lifetime_membership',
     ];
 
     /**

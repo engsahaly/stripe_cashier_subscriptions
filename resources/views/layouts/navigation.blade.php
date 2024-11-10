@@ -23,12 +23,16 @@
                     </x-nav-link>
 
                     {{-- plans Link --}}
-                    <x-nav-link :href="route('plans')" :active="request()->routeIs('plans')">
-                        {{ __('Plans') }}
-                    </x-nav-link>
+                    @if (!Auth::user()?->lifetime_membership)
+                        <x-nav-link :href="route('plans')" :active="request()->routeIs('plans')">
+                            {{ __('Plans') }}
+                        </x-nav-link>
+                    @endif
 
                     {{-- members Link --}}
-                    @if (Auth::user()?->subscribed('monthly-plan') || Auth::user()?->subscribed('yearly-plan'))
+                    @if (Auth::user()?->subscribed('monthly-plan') ||
+                            Auth::user()?->subscribed('yearly-plan') ||
+                            Auth::user()?->lifetime_membership)
                         <x-nav-link :href="route('members')" :active="request()->routeIs('members')">
                             {{ __('Members Area') }}
                         </x-nav-link>
@@ -82,6 +86,12 @@
                             <x-dropdown-link :href="route('profile.edit')">
                                 {{ __('Profile') }}
                             </x-dropdown-link>
+
+                            @if (!Auth::user()?->lifetime_membership)
+                                <x-dropdown-link :href="route('invoices')">
+                                    {{ __('Invoices') }}
+                                </x-dropdown-link>
+                            @endif
 
                             <!-- Authentication -->
                             <form method="POST" action="{{ route('logout') }}">

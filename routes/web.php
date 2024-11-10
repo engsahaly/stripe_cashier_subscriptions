@@ -1,12 +1,23 @@
 <?php
 
-use App\Http\Controllers\CheckoutController;
+use Illuminate\Http\Request;
+use Laravel\Cashier\Cashier;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\InvoicesController;
 use App\Http\Middleware\AccessOnlyToSubscribedUsers;
-use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
+Route::get('/', function (Request $request) {
+    if ($request->has('session_id')) {
+        $session = Cashier::stripe()->checkout->sessions->retrieve($request->get('session_id'));
+    
+        if ($session && $session->status == 'complete') {
+            Auth::user()->update(['lifetime_membership' => true]);
+        }
+    }
+    
     return view('home');
 })->name('home');
 
@@ -51,6 +62,9 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+// invoices
+Route::get('/invoices', [InvoicesController::class, 'index'])->name('invoices');
+Route::get('/invoices/download/{invoiceId}', [InvoicesController::class, 'download'])->name('invoices.download');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

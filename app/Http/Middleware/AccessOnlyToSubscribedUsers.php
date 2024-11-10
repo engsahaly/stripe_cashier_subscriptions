@@ -16,7 +16,7 @@ class AccessOnlyToSubscribedUsers
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::user()->subscribed('monthly-plan') || Auth::user()->subscribed('yearly-plan')) {
+        if (Auth::user()->subscribed('monthly-plan') || Auth::user()->subscribed('yearly-plan') || Auth::user()->lifetime_membership) {
             return $next($request);
         }
         return to_route('plans');

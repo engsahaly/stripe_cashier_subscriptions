@@ -14,10 +14,24 @@ class CheckoutController extends Controller
         // return $query->when($plan->slug == 'monthly-plan', function () use ($query) {
         //     return $query->trialDays(7);
         // })
+
+        if ($plan->slug == 'lifetime-plan') {
+            return $this->checkoutLifetimeMembership();
+        }
         
         return Auth::user()->newSubscription($plan->slug, $plan->stripe_price_id )
         ->checkout([
             'success_url' => route('home', ['message' => 'Subscribed Successfully']),
+            'cancel_url' => route('plans'),
+        ]);
+    }
+
+    public function checkoutLifetimeMembership()
+    {
+        $price = Plan::firstWhere('slug', 'lifetime-plan')->stripe_price_id;
+        return Auth::user()
+        ->checkout($price, [
+            'success_url' => route('home').'?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => route('plans'),
         ]);
     }
