@@ -48,4 +48,18 @@ class User extends Authenticatable
             'trial_ends_at' => 'datetime',
         ];
     }
+
+    public static function booted()
+    {
+        static::updated(function ($user) {
+            if ($user->hasStripeId()) {
+                $user->syncStripeCustomerDetails();
+            }
+        });
+    }
+
+    // public function stripeName()
+    // {
+    //     return 'Hello this is My name = ' . $this->name ?? null;
+    // }
 }

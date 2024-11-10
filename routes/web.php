@@ -22,6 +22,29 @@ Route::get('/members', function () {
 Route::get('/checkout/{plan:slug}', [CheckoutController::class, 'index'])->middleware('auth')->name('checkout');
 Route::post('/checkout/post', [CheckoutController::class, 'post'])->middleware('auth')->name('checkout.post');
 
+// Billing Portal
+Route::get('/billing-portal', function () {
+    // return Auth::user()->redirectToBillingPortal(route('plans'));
+    dd(Auth::user()->billingPortalUrl(route('plans')));
+})->name('billing-portal');
+
+// Cancel
+Route::get('/cancel', function () {
+    Auth::user()->subscription('monthly-plan')->cancel();
+    return back();
+})->name('cancel');
+
+// Cancel now
+Route::get('/cancel-now', function () {
+    Auth::user()->subscription('monthly-plan')->cancelNow();
+    return back();
+})->name('cancel-now');
+
+// resume
+Route::get('/resume', function () {
+    Auth::user()->subscription('monthly-plan')->resume();
+    return back();
+})->name('resume');
 
 
 Route::get('/dashboard', function () {

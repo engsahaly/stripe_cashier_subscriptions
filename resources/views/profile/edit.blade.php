@@ -19,6 +19,22 @@
                 </div>
             </div>
 
+            @if (Auth::user()->subscribed('monthly-plan') || Auth::user()->subscribed('yearly-plan'))
+                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                    <div class="max-w-xl">
+                        @include('profile.partials.billing-portal')
+                    </div>
+                </div>
+            @endif
+
+            @if (Auth::user()->subscribed('monthly-plan') || Auth::user()->subscribed('yearly-plan'))
+                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                    <div class="max-w-xl">
+                        @include('profile.partials.cancel-resume')
+                    </div>
+                </div>
+            @endif
+
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                 <div class="max-w-xl">
                     @include('profile.partials.delete-user-form')
